@@ -5,3 +5,8 @@ services:
     build: 
       context: ./visualisation
     command: /bin/sh -c "while sleep 1000; do :; done"
+  data-analyser:
+    container_name: "data-analyzer"
+    build: 
+      context: ./data-analyzer
+    command: /bin/sh -c "while sleep 1000; do :; done"
