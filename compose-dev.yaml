@@ -4,6 +4,7 @@ services:
     container_name: "visualisation"
     build: 
       context: ./visualisation
+      dockerfile: dev.Dockerfile
     volumes:
       - .:/workspace:cached
     command: /bin/sh -c "while sleep 1000; do :; done"
@@ -12,6 +13,7 @@ services:
     container_name: "data-analyzer"
     build: 
       context: ./data-analyzer
+      dockerfile: dev.Dockerfile
     volumes:
       - .:/workspace:cached
     command: /bin/sh -c "while sleep 1000; do :; done"

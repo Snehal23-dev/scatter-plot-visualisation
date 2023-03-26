@@ -1,14 +1,16 @@
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import TimelineIcon from '@mui/icons-material/Timeline';
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
-import { useRef } from 'react';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import { useContext, useRef } from 'react';
+import { Context } from '../../context/Context';
 
 function QuickActions() {
     const fileUploadRef = useRef();
+    const [graphData, setGraphData] = useContext(Context)
+
 
     const handleFileChange = (e) => {
         if (e.target.files) {
-            console.log("File uploaded", e.target.files[0]);
 
             const formData = new FormData();
             formData.append("file", e.target.files[0]);
@@ -16,7 +18,9 @@ function QuickActions() {
             fetch("/file/upload", {
                 method: 'POST',
                 body: formData
-              });
+            }).then((response) => response.json())
+            .then((d) => setGraphData(d));
+            
         }
     }
 
