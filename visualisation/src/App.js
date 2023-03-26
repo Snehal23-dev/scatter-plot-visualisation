@@ -1,6 +1,6 @@
 import './App.css';
 import CssBaseline from '@mui/material/CssBaseline';
-import Layout from './components';
+import { Layout } from './components';
 
 
 function App() {

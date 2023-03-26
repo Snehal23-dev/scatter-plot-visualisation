@@ -1,2 +1,3 @@
 import Layout from './layout/Layout';
-export default Layout;
+import Navbar from './navbar/Navbar';
+export { Layout, Navbar };
