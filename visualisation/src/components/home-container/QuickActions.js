@@ -9,6 +9,14 @@ function QuickActions() {
     const handleFileChange = (e) => {
         if (e.target.files) {
             console.log("File uploaded", e.target.files[0]);
+
+            const formData = new FormData();
+            formData.append("file", e.target.files[0]);
+
+            fetch("/file/upload", {
+                method: 'POST',
+                body: formData
+              });
         }
     }
 

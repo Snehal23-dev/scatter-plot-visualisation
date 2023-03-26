@@ -4,9 +4,14 @@ services:
     container_name: "visualisation"
     build: 
       context: ./visualisation
+    volumes:
+      - .:/workspace:cached
     command: /bin/sh -c "while sleep 1000; do :; done"
+    
   data-analyser:
     container_name: "data-analyzer"
     build: 
       context: ./data-analyzer
+    volumes:
+      - .:/workspace:cached
     command: /bin/sh -c "while sleep 1000; do :; done"

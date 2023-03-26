@@ -1,11 +1,12 @@
+import { Box, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import * as d3 from 'd3';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import InfoPage from '../info-page/InfoPage';
 
-function draw(scatterPlotRef) {
-    console.log(scatterPlotRef);
+function draw(scatterPlotRef, data) {
     // set the dimensions and margins of the graph
-    var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+    var margin = { top: 100, right: 30, bottom: 30, left: 60 },
         width = scatterPlotRef.current.clientWidth - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
@@ -21,7 +22,7 @@ function draw(scatterPlotRef) {
 
     // Add X axis
     var x = d3.scaleLinear()
-        .domain([0, 4000])
+        .domain([0, d3.max(data, (d) => d.x) + 5])
         .range([0, width]);
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
@@ -29,39 +30,56 @@ function draw(scatterPlotRef) {
 
     // Add Y axis
     var y = d3.scaleLinear()
-        .domain([0, 500000])
+        .domain([0, d3.max(data, (d) => d.y)+30000])
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
-    //Read the data
-    d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/2_TwoNum.csv", function (data) {
-        // Add dots
-        svg.append('g')
-            .selectAll("dot")
-            .data([data])
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) { return x(d.GrLivArea); })
-            .attr("cy", function (d) { return y(d.SalePrice); })
-            .attr("r", 3)
-            .style("fill", "#D6EAF8")
-            .style("stroke", "#3498DB")
 
-    })
+    //Read the data
+    svg.append('g')
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return x(d.x); })
+        .attr("cy", function (d) { return y(d.y); })
+        .attr("r", 5)
+        .style("fill", "#D6EAF8")
+        .style("stroke", "#3498DB")
+
+
 }
 
 function ScatterPlot() {
+    const [data, setData] = useState([]);
     const scatterPlotRef = useRef();
+
     useEffect(() => {
-        draw(scatterPlotRef);
+        if(data.length > 0) {
+            draw(scatterPlotRef, data);
+        }
+
         return () => {
             d3.select(".scatter-plot").remove();
         }
+    }, [data]);
+
+
+    useEffect(() => {
+        fetch('/file')
+            .then((response) => response.json())
+            .then((d) => setData(d));
     }, []);
+
+
+
     return (
         <>
-            <Container ref={scatterPlotRef} >
-                <div id="my_dataviz"></div>
+            <Container ref={scatterPlotRef}>
+                {
+                    data.length > 0 ? <div id="my_dataviz"></div> : <InfoPage text="Please upload csv file"/>
+                }
+                
             </Container>
         </>
     )

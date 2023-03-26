@@ -1,3 +1,5 @@
 import Layout from './layout/Layout';
 import Navbar from './navbar/Navbar';
-export { Layout, Navbar };
+import InfoPage from './info-page/InfoPage';
+
+export { Layout, Navbar, InfoPage};
